@@ -8,7 +8,7 @@
 import UIKit
 
 class WebView: UITableViewController {
-    var websites = ["apple.com", "hackingwithswift.com"]
+    var websites = ["apple.com", "hackingwithswift.com", "google.com"]
 
     override func viewDidLoad() {
         super.viewDidLoad()

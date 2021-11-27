@@ -26,6 +26,9 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
         
+        let back = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backTapped))
+        let forward = UIBarButtonItem(title: "Forward", style: .plain, target: self, action: #selector(forwardTapped))
+        
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
         
@@ -35,7 +38,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         let progressButton = UIBarButtonItem(customView: progressView)
         
         
-        toolbarItems = [progressButton, spacer, refresh]
+        toolbarItems = [progressButton, spacer, forward, back, spacer ,refresh]
         navigationController?.isToolbarHidden = false
         
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
@@ -56,6 +59,13 @@ class ViewController: UIViewController, WKNavigationDelegate {
         present(ac,animated: true)
     }
     
+    @objc func forwardTapped() {
+        webView.goForward()
+    }
+    
+    @objc func backTapped() {
+        webView.goBack()
+    }
     
     func openPage(action: UIAlertAction) {
         guard let actionTitle = action.title else { return }
@@ -78,7 +88,9 @@ class ViewController: UIViewController, WKNavigationDelegate {
                 }
             }
         }
+
         decisionHandler(.cancel)
+        showAlert()
     }
     
     private func showAlert() {
