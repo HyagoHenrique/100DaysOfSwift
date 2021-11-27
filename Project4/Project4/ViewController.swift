@@ -8,10 +8,11 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKNavigationDelegate {
+class ViewController: UINavigationController, WKNavigationDelegate {
     var webView: WKWebView!
     var progressView: UIProgressView!
     var websites = ["apple.com", "hackingwithswift.com"]
+    
     
     override func loadView() {
         webView = WKWebView()
@@ -65,13 +66,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         title = webView.title
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "estimatedProgress" {
-            progressView.progress = Float(webView.estimatedProgress)
-        }
-    }
-    
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url
 
         if let host = url?.host {
@@ -82,9 +77,19 @@ class ViewController: UIViewController, WKNavigationDelegate {
                 }
             }
         }
-
         decisionHandler(.cancel)
     }
-
+    
+    private func showAlert() {
+        let ac = UIAlertController(title: "Page no allowed", message: nil, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK...", style: .default, handler: nil))
+        present(ac,animated: true)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "estimatedProgress" {
+            progressView.progress = Float(webView.estimatedProgress)
+        }
+    }
 }
 
