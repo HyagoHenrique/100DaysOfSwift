@@ -27,5 +27,11 @@ class WebView: UITableViewController {
         cell.textLabel?.font = .systemFont(ofSize: 16)
         return cell
     }
-
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "ViewController") as? ViewController {
+            vc.website = websites[indexPath.row]
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }
